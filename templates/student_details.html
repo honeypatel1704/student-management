@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Student Details</h2>
+<table>
+    <tr><th>Name:</th><td>{{ student.name }}</td></tr>
+    <tr><th>Father's Name:</th><td>{{ student.father_name }}</td></tr>
+    <tr><th>Mother's Name:</th><td>{{ student.mother_name }}</td></tr>
+    <tr><th>Birthdate:</th><td>{{ student.birthdate }}</td></tr>
+    <tr><th>Address:</th><td>{{ student.address }}</td></tr>
+    <tr><th>Student Phone:</th><td>{{ student.student_phone }}</td></tr>
+    <tr><th>Father's Phone:</th><td>{{ student.father_phone }}</td></tr>
+    <tr><th>Enrollment Number:</th><td>{{ student.enrollment_number }}</td></tr>
+    <tr><th>Class:</th><td>{{ student.class }}</td></tr>
+    <tr><th>Batch:</th><td>{{ student.batch }}</td></tr>
+    <tr><th>Email:</th><td>{{ student.email }}</td></tr>
+    {% if student.linkedin %}
+    <tr><th>LinkedIn:</th><td><a href="{{ student.linkedin }}" target="_blank">{{ student.linkedin }}</a></td></tr>
+    {% endif %}
+    {% if student.github %}
+    <tr><th>GitHub:</th><td><a href="{{ student.github }}" target="_blank">{{ student.github }}</a></td></tr>
+    {% endif %}
+</table>
+<a href="{{ url_for('search') }}">Back to Search</a>
+{% endblock %}

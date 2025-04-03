@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Search Student</h2>
+<form method="POST">
+    <label for="search_term">Search by Name or Enrollment Number:</label>
+    <input type="text" id="search_term" name="search_term">
+    <button type="submit">Search</button>
+</form>
+
+{% if results %}
+    <h3>Search Results</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Enrollment Number</th>
+            <th>Class</th>
+            <th>Action</th>
+        </tr>
+        {% for student in results %}
+        <tr>
+            <td>{{ student.name }}</td>
+            <td>{{ student.enrollment_number }}</td>
+            <td>{{ student.class }}</td>
+            <td><a href="{{ url_for('student_details', enrollment_number=student.enrollment_number) }}">View Details</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+{% endblock %}
