@@ -8,16 +8,14 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to EC2 on main branch push
+    name: Deploy to EC2 on master branch push
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout source code
+      - name: Checkout the files
         uses: actions/checkout@v2
 
-      # Step 2: Deploy code to EC2 using SSH key
-      - name: Deploy files to EC2 instance
+      - name: Deploy to Server 1
         uses: easingthemes/ssh-deploy@main
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
@@ -25,24 +23,16 @@ jobs:
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
 
-      # Step 3: Connect and configure Apache server
-      - name: Execute remote commands on EC2
+      - name: Executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST_DNS }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # Update packages
-            sudo apt-get update -y
-
-            # Install Apache if not already installed
+            sudo apt-get -y update
             sudo apt-get install -y apache2
-
-            # Start and enable Apache
             sudo systemctl start apache2
             sudo systemctl enable apache2
-
-            # Move files to /var/www/html (adjust if needed)
-            cd ${{ secrets.TARGET_DIR }}
-            sudo cp -r * /var/www/html/
+            cd home
+            sudo mv * /var/www/html
