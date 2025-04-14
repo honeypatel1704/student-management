@@ -22,6 +22,8 @@ jobs:
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
+          SERVER_IP: ${{ secrets.SERVER_IP }}
+          REMOTE_PATH: /var/www/html
 
       - name: Executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
