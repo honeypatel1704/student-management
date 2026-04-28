@@ -1,32 +1,106 @@
-# Student Management System
+# Student Management System (FastAPI)
 
-A Flask web application for managing student records with MongoDB backend, designed for AWS deployment.
+Production-style, modular FastAPI backend for student management with authentication, role-based authorization, validation, pagination, logging, agent hooks, and PostgreSQL persistence.
 
-## Features
+## What Is Included
 
-- Add student details (name, contact info, enrollment details, etc.)
-- Search students by name or enrollment number
-- View complete student profiles
-- Responsive web interface
-- MongoDB database integration
+- FastAPI + PostgreSQL architecture
+- JWT authentication (`/api/v1/auth/login`)
+- Role-based access control (`admin`, `user`, `agent`)
+- Full student CRUD API
+- Pagination + filtering
+- Strong request validation via Pydantic
+- Central logging and global exception handling
+- Agent query + event hook endpoints
 
-## Technologies Used
+## Project Structure
 
-- Python 3
-- Flask (Web Framework)
-- MongoDB (Database)
-- HTML/CSS (Frontend)
+```text
+main.py
+requirements.txt
+README.md
+app/
+	api/
+		v1/
+			endpoints/
+				auth.py
+				students.py
+				health.py
+				agents.py
+			router.py
+	core/
+		config.py
+		security.py
+		logging_config.py
+	test.py
+	.env
+	alembic.ini
+	alembic/
+		env.py
+		README
+		script.py.mako
+		versions/
+	db/
+		config/
+			app_config.py
+		database/
+			schema/
+				db.py
+```powershell
+			todo.py
+3. Configure environment variables (optional but recommended)
+			helper.py
+			app.py
+		api/
+		core/
+		db/
+		dependencies/
+		schemas/
+		services/
 
-## Prerequisites
+```powershell
+$env:POSTGRES_DSN = "postgresql+psycopg2://postgres:postgres@localhost:5432/student_db"
+$env:JWT_SECRET_KEY = "replace-with-strong-secret"
+$env:BOOTSTRAP_ADMIN_EMAIL = "admin@student.local"
+$env:BOOTSTRAP_ADMIN_PASSWORD = "Admin@123"
+```
 
-- Python 3.6+
-- MongoDB
-- pip (Python package manager)
+4. Run server
 
-## Installation
+```powershell
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
 
-### 1. Clone the repository
+5. Open docs
 
-```bash
-git clone https://github.com/yourusername/student-management.git
-cd student-management
+- Swagger UI: `http://localhost:8000/docs`
+- OpenAPI JSON: `http://localhost:8000/openapi.json`
+
+## Default Bootstrap Admin
+
+On first run, a default admin user is auto-created from config.
+
+- Email: `admin@student.local`
+- Password: `Admin@123`
+
+Change these values in environment variables before production usage.
+
+## API Overview
+
+- `GET /api/v1/health`
+- `POST /api/v1/auth/login`
+- `GET /api/v1/auth/me`
+- `POST /api/v1/auth/users` (admin only)
+- `POST /api/v1/students`
+- `GET /api/v1/students`
+- `GET /api/v1/students/{enrollment_number}`
+- `PUT /api/v1/students/{enrollment_number}`
+- `DELETE /api/v1/students/{enrollment_number}` (admin only)
+- `POST /api/v1/agent/query` (admin/agent)
+- `POST /api/v1/agent/hooks/event` (admin/agent)
+
+## Notes
+
+- Old Flask files/templates were removed as part of migration.
+- Enrollment number remains unique and immutable once created.
+- Date fields use ISO format (`YYYY-MM-DD`).
