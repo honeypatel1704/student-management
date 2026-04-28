@@ -1,11 +1,8 @@
 from datetime import datetime
 from typing import Literal
-
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator
 
-
 RoleType = Literal["admin", "user", "agent", "student"]
-
 
 class LoginRequest(BaseModel):
     # model_config = ConfigDict(
@@ -19,11 +16,9 @@ class LoginRequest(BaseModel):
     email: EmailStr
     password: str = Field(min_length=6, max_length=128)
 
-
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
-
 
 class UserCreateRequest(BaseModel):
     name: str = Field(min_length=2, max_length=120)
@@ -42,7 +37,6 @@ class UserCreateRequest(BaseModel):
             if local.isdigit():
                 raise ValueError("Student email local-part cannot be only digits")
         return self
-
 
 class UserResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)

@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from typing import Generator
 
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, inspect
 from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 from app.core.config import get_settings
@@ -26,9 +26,12 @@ def get_db() -> Generator[Session, None, None]:
 
 
 def init_db() -> None:
-    from app.models import Student, User  # noqa: F401
+    from app.models import User
 
-    Base.metadata.create_all(bind=engine)
+    # Schema lifecycle is handled by Alembic migrations.
+    # Startup should only perform data bootstrap tasks.
+    if not inspect(engine).has_table("users"):
+        return
 
     db = SessionLocal()
     try:
