@@ -8,6 +8,14 @@ RoleType = Literal["admin", "user", "agent", "student"]
 
 
 class LoginRequest(BaseModel):
+    # model_config = ConfigDict(
+    #     json_schema_extra={
+    #         "example": {
+    #             "email": "admin@example.com",
+    #             "password": "Admin@123"
+    #         }
+    #     }
+    # )
     email: EmailStr
     password: str = Field(min_length=6, max_length=128)
 

@@ -22,7 +22,7 @@ def create_student(
 ):
     service = StudentService(db)
     try:
-        return service.create(payload.model_dump(by_alias=False))
+        return service.create(payload.model_dump(by_alias=False, mode="json"))
     except ValueError as exc:
         raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
 
@@ -58,7 +58,7 @@ def update_student(
     db: Session = Depends(get_db),
 ):
     service = StudentService(db)
-    student = service.update(enrollment_number, payload.model_dump(by_alias=False))
+    student = service.update(enrollment_number, payload.model_dump(by_alias=False, mode="json"))
     if not student:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
     return student

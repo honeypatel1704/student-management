@@ -33,8 +33,11 @@ class StudentService:
 
     def create(self, payload):
         now = datetime.now(timezone.utc)
+        # Remove keys that we'll explicitly set to avoid duplicate keyword args
+        sanitized = {k: v for k, v in payload.items() if k not in ("enrollment_number", "email")}
+
         document = Student(
-            **payload,
+            **sanitized,
             enrollment_number=payload["enrollment_number"].upper(),
             email=payload["email"].lower(),
             created_at=now,
